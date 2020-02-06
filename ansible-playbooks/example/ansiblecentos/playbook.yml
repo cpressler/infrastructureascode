@@ -1,0 +1,19 @@
+#################################################
+# DO Community Playbooks: apache
+#################################################
+---
+- hosts: do-single
+  become: true
+#  vars_files:
+#    - vars/default.yml
+
+  tasks:
+    - name: Install the latest version of wget
+      yum: name=wget state=present 
+
+    - name:  Show a debug message
+      debug:  msg="Hello World"
+
+    - name:   show the running docker containers
+      shell: 
+        cmd: docker container ps -a

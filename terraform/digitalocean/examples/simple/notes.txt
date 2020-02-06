@@ -1,0 +1,13 @@
+Ensure you have a environment variable called TF_VAR_do_token and the value is the value of your DO token
+
+terraform init
+
+terraform plan
+
+terraform apply
+
+look at the ip address returned 
+
+ssh root@64.225.23.183
+
+cat /root/.ssh/authoried_keys should show the public key for both ssh keys stored on the DO account ssh keys page
