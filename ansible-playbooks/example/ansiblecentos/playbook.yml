@@ -1,8 +1,8 @@
 #################################################
-# DO Community Playbooks: apache
+# DO Community Playbooks: generic
 #################################################
 ---
-- hosts: do-single
+- hosts: do_single
   become: true
 #  vars_files:
 #    - vars/default.yml

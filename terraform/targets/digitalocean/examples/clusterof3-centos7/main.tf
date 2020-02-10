@@ -48,6 +48,7 @@ resource "digitalocean_droplet" "webub" {
     name = "sv-test-${count.index +1}"
     region =  var.region
     size =  var.droplet_size
+    private_networking = true
     ssh_keys = [data.digitalocean_ssh_key.main.id, 
         data.digitalocean_ssh_key.work.id, data.digitalocean_ssh_key.chrisb.id]
 # ensures that we create the new resource before we destroy the old one

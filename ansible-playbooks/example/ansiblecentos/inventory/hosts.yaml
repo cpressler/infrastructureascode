@@ -5,15 +5,15 @@ all:
     ansible_ssh_user: root
     ansible_user: root
   children:
-    do-clusterservers:
+    do_clusterservers:
       hosts:
         sv-test-1.softvision.site:
         sv-test-2.softvision.site:
         sv-test-3.softvision.site:
-    do-haservers:
+    do_haservers:
       hosts:
         sv-test-1.softvision.site:
         sv-test-2.softvision.site:
-    do-single:
+    do_single:
       hosts:
         sv-test-1.softvision.site:

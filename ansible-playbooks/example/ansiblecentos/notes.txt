@@ -1,0 +1,24 @@
+
+To prevent this when running ansilbe on a new cloud server
+
+
+GATHERING FACTS ***************************************************************
+ The authenticity of host 'xxx.xxx.xxx.xxx (xxx.xxx.xxx.xxx)' can't be established.
+ RSA key fingerprint is xx:yy:zz:....
+ Are you sure you want to continue connecting (yes/no)?
+
+
+Two options - the first, as you said in your own answer, is setting the environment variable ANSIBLE_HOST_KEY_CHECKING to False.
+
+The second way to set it is to put it in an ansible.cfg file, and that's a really useful option because you can either set that globally (at system or user level, in /etc/ansible/ansible.cfg or ~/.ansible.cfg), or in an config file in the same directory as the playbook you are running.
+
+To do that, make an ansible.cfg file in one of those locations, and include this:
+
+[defaults]
+host_key_checking = False
+
+OR
+export ANSIBLE_HOST_KEY_CHECKING=False
+
+
+ansible -i inventory do_single  -m ping
