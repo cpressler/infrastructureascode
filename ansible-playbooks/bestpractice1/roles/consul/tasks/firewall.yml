@@ -1,0 +1,43 @@
+---
+- name: Clear SELinux
+  shell:
+    cmd: setenforce 0
+  become: yes
+  when: ansible_distribution == "CentOS"
+
+- name: Modify  SELinux
+  shell:
+    cmd: sed -i 's/^SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
+  become: yes
+  when: ansible_distribution == "CentOS"
+
+- name: firewalld
+  yum:
+    pkg: "firewalld"
+    update_cache: true
+
+- name: Start firewalld service
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+  become: yes
+
+
+- name: Firewall 1
+  shell:
+    cmd: firewall-cmd  --add-port={8300,8301,8302,8400,8500,8600}/tcp --permanent
+  become: yes
+  when: ansible_distribution == "CentOS"
+
+- name: Firewall 2
+  shell:
+    cmd: firewall-cmd  --add-port={8300,8301,8302,8400,8500,8600}/tcp --permanent
+  become: yes
+  when: ansible_distribution == "CentOS"
+
+- name: Firewall 3
+  shell:
+    cmd: firewall-cmd --reload
+  become: yes
+  when: ansible_distribution == "CentOS"

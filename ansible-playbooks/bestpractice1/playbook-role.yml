@@ -1,0 +1,10 @@
+#################################################
+# DO Community Playbooks: apache
+#################################################
+---
+- hosts: do_clusterconsul
+  become: true
+#  vars_files:
+#    - vars/default.yml
+  roles:
+    - consul

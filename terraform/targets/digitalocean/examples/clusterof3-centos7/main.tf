@@ -1,4 +1,12 @@
 variable do_token {}
+variable "pvt_key" { }
+# type = string
+#  default = "{$HOME}/.ssh/id_rsa"
+#}
+
+#variable "pub_key" {}
+
+
 
 provider digitalocean {
     token = var.do_token
@@ -57,6 +65,31 @@ resource "digitalocean_droplet" "webub" {
     lifecycle {
         create_before_destroy = true
     }
+
+  connection {
+    user = "root"
+    type = "ssh"
+    host = self.ipv4_address
+    private_key = "${file(var.pvt_key)}"
+    timeout = "2m"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "export PATH=$PATH:/usr/bin",
+      # install nginx
+      #"sudo yum update",
+      #"sudo yum -y install epel-release",
+      #"sudo yum -y install nginx",
+      "sudo groupadd --system ansible",
+      "sudo useradd -s /sbin/nologin --system -g ansible svc_ansible",
+      #"sudo mkdir /home/svc_ansible/.ssh",
+      "sudo cp -R /root/.ssh /home/svc_ansible/",
+      "sudo chown svc_ansible:ansible /home/svc_ansible/"
+    ]
+  }
+
+
 }
 
 
@@ -76,5 +109,14 @@ resource "digitalocean_record" "web" {
   ttl    = 30
   name   = digitalocean_droplet.webub[count.index].name
   value   = digitalocean_droplet.webub[count.index].ipv4_address
+}
+
+resource "digitalocean_record" "consul" {
+  count = var.droplet_count
+  domain = data.digitalocean_domain.web.name
+  type   = "CNAME"
+  ttl    = 30
+  name   = "consul-${count.index +1}"
+  value   = "${digitalocean_droplet.webub[count.index].name}.${data.digitalocean_domain.web.name}."
 }
 

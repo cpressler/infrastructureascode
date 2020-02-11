@@ -21,6 +21,7 @@
     url: https://download.docker.com/linux/centos/docker-ce.repo
     dest: /etc/yum.repos.d/docer-ce.repo
   become: yes
+  when: ansible_distribution == "CentOS"
 
 - name: Enable Docker Edge repo
   ini_file:
@@ -29,6 +30,7 @@
     option: enabled
     value: 0
   become: yes
+  when: ansible_distribution == "CentOS"
 
 - name: Enable Docker Test repo
   ini_file:
@@ -37,6 +39,7 @@
     option: enabled
     value: 0
   become: yes
+  when: ansible_distribution == "CentOS"
 
 - name: Install Docker
   package:
@@ -55,9 +58,11 @@
   shell:
     cmd: curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   become: yes
+  when: ansible_distribution == "CentOS"
 
 - name : make docker compose executable
   file: dest=/usr/local/bin/docker-compose mode=+xx
+  when: ansible_distribution == "CentOS"
 
 - name: show docker version
   shell:

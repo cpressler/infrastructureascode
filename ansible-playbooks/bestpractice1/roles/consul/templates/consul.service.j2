@@ -1,0 +1,22 @@
+[Unit]
+Description=consul agent
+Documentation=https://www.consul.io/
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User={{ consul_user }}
+Group={{ consul_group }}
+ExecStart={{ consul_bindir }}/consul agent {% if consul_server %}-server{% endif %} \
+   -node={{ consul_nodename }} \
+   -config-dir {{ consul_configdir }}
+
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGINT
+TimeoutStopSec=5
+Restart=on-failure
+SyslogIdentifier={{ consul_user }}
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,28 @@
+all:
+  hosts:
+    sv-test-1.softvision.site:
+  vars:
+    ansible_ssh_user: root
+    ansible_user: root
+  children:
+    do_clusterservers:
+      hosts:
+        sv-test-1.softvision.site:
+        sv-test-2.softvision.site:
+        sv-test-3.softvision.site:
+    do_haservers:
+      hosts:
+        sv-test-1.softvision.site:
+        sv-test-2.softvision.site:
+    do_single:
+      hosts:
+        sv-test-1.softvision.site:
+
+    do_clusterconsul:
+      hosts:
+        consul-1.softvision.site:
+        consul-2.softvision.site:
+        consul-3.softvision.site:
+    do_single_consul:
+      hosts:
+        consul-1.softvision.site:
