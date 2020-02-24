@@ -1,0 +1,12 @@
+---
+- name: Firewall 1
+  shell:
+    cmd: firewall-cmd  --add-service=dns --zone=public  --permanent
+  become: yes
+  when: ansible_distribution == "CentOS"
+
+- name: Firewall 2
+  shell:
+    cmd: firewall-cmd --reload
+  become: yes
+  when: ansible_distribution == "CentOS"

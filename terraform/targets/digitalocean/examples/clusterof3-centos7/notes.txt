@@ -16,3 +16,5 @@ cat /root/.ssh/authoried_keys should show the public key for both ssh keys store
 how to find all the distribution images
 
 curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer <do api token>" "https://api.digitalocean.com/v2/images?page=1&per_page=200&type=distribution"
+
+terraform plan -var-file="sfo2.tfvars"

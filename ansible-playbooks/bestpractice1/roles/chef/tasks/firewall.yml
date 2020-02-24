@@ -1,0 +1,21 @@
+---
+- name: Firewall http
+  shell:
+    cmd: firewall-cmd --permanent --zone public --add-service http
+  become: yes
+  when: ansible_distribution == "CentOS"
+
+
+- name: Firewall https
+  shell:
+    cmd: firewall-cmd --permanent --zone public --add-service https
+  become: yes
+  when: ansible_distribution == "CentOS"
+
+
+
+- name: Firewall reload
+  shell:
+    cmd: firewall-cmd --reload
+  become: yes
+  when: ansible_distribution == "CentOS"

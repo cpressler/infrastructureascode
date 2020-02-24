@@ -26,3 +26,8 @@ all:
     do_single_consul:
       hosts:
         consul-1.softvision.site:
+
+    do_chefserver:
+      hosts:
+        sv-test-3.softvision.site:
+

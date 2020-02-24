@@ -1,0 +1,19 @@
+$TTL 86400
+@ IN SOA primary.linux.local. root.linux.local. (
+2014112511 ;Serial
+3600 ;Refresh
+1800 ;Retry
+604800 ;Expire
+86400 ;Minimum TTL
+)
+;Name Server Information
+@ IN NS primary.linux.local.
+;Reverse lookup for Name Server
+8 IN PTR primary.linux.local.
+;PTR Record IP address to HostName
+100 IN PTR www.linux.local.
+150 IN PTR mail.linux.local.
+175 IN PTR qa1.linux.local.
+176 IN PTR qa2.linux.local.
+177 IN PTR qa3.linux.local.
+178 IN PTR qa4.linux.local.

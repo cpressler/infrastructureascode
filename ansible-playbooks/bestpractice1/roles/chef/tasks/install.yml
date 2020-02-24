@@ -1,0 +1,52 @@
+---
+
+- name: get chef
+  get_url:
+    url: https://packages.chef.io/stable/el/7/chef-server-core-12.10.0-1.el7.x86_64.rpm
+    dest: /tmp
+  become: yes
+  when: ansible_distribution == "CentOS"
+
+#- name: install chef rpm
+#  yum:
+#  pkg: /tmp/chef-server-core-12.10.0-1.el7.x86_64.rpm
+#  state: present
+
+
+- name: Install chef via yum
+  package:
+    name: /tmp/chef-server-core-12.10.0-1.el7.x86_64.rpm
+    state: latest
+  become: yes
+
+
+
+
+#- name: install chef rpm
+#  shell:
+#    cmd: rpm -ivh /tmp/chef-server-core-*.rpm
+
+- name: delete chef rpm
+  shell:
+    cmd: rm /tmp/chef-server-core-*.rpm
+
+- name: chef reconfigure
+  shell:
+    cmd: chef-server-ctl reconfigure --chef-license=accept
+
+
+- name: chef status
+  shell:
+    cmd: chef-server-ctl status
+
+- name: chef create account
+  shell:
+    cmd: chef-server-ctl user-create admin admin admin chet@pressler.com password -f /etc/chef/admin.pem
+
+
+- name: chef creater organization
+  shell:
+    cmd: chef-server-ctl org-create itzgeek "ITzGeek, Inc" --association_user admin -f /etc/chef/itzgeek-validator.pem
+
+
+

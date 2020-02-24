@@ -1,0 +1,18 @@
+$TTL 86400
+@ IN SOA primary.qa.loyalty.softvision.site. root.qa.loyalty.softvision.site. (
+2016042112 ;Serial
+3600 ;Refresh
+1800 ;Retry
+604800 ;Expire
+43200 ;Minimum TTL
+)
+;Name Server Information
+@ IN NS primary.qa.loyalty.softvision.site.
+;IP address of Name Server
+primary IN A 178.128.183.142
+;A - Record HostName To Ip Address
+qa1  IN A 192.168.74.175
+qa2  IN A 192.168.74.176
+qa3  IN A 192.168.74.177
+qa4  IN A 192.168.74.178
+;CNAME record

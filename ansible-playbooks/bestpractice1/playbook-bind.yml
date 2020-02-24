@@ -1,0 +1,10 @@
+#################################################
+# DO Community Playbooks: apache
+#################################################
+---
+- hosts: do_single
+  become: true
+#  vars_files:
+#    - vars/default.yml
+  roles:
+    - ansible-role-bind-master

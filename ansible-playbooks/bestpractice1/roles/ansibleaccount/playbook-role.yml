@@ -1,0 +1,15 @@
+#################################################
+# DO Community Playbooks:
+#
+#https://medium.com/@khandelwal12nidhi/setup-ssh-key-and-initial-user-using-ansible-playbook-61eabbb0dba4
+#################################################
+---
+
+- hosts: do_clusterconsul
+  vars:
+    - devops_password: 'abcddefsfdfdfdfdfdfdfdfdfdfd'
+  gather_facts: no
+  remote_user: ubuntu
+  become: true
+  roles:
+    - ansibleaccount

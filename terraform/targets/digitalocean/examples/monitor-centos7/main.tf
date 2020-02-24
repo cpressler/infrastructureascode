@@ -24,7 +24,7 @@ variable "droplet_count" {
 
 variable "droplet_size" {
     type = string
-    default = "s-1vcpu-1gb"
+    default = "s-2vcpu-4gb"
 }
 
 variable "droplet_image" {
@@ -49,11 +49,11 @@ data "digitalocean_domain" "web" {
     name = "softvision.site"
 }
 
-resource "digitalocean_droplet" "webub" {
+resource "digitalocean_droplet" "monitor" {
     image = var.droplet_image
     count = var.droplet_count
 #    name = "sv-test-${var.region}-${count.index +1}"
-    name = "sv-test-${count.index +1}"
+    name = "monitor-${count.index +1}"
     region =  var.region
     size =  var.droplet_size
     private_networking = true
@@ -70,15 +70,16 @@ resource "digitalocean_droplet" "webub" {
     user = "root"
     type = "ssh"
     host = self.ipv4_address
-    private_key = "file(var.pvt_key)"
+#    private_key = "${file(var.pvt_key)}"
+    private_key = file(var.pvt_key)
     timeout = "2m"
   }
 
   provisioner "remote-exec" {
     inline = [
       "export PATH=$PATH:/usr/bin",
-      #"sudo nohup yum -y update &",
-      #"sudo nohup yum -y install epel-release &",
+      "sudo nohup yum -y update &",
+      "sudo nohup yum -y install epel-release &",
       "sudo groupadd --system ansible",
       "sudo useradd -s /sbin/nologin --system -g ansible svc_ansible",
       #"sudo mkdir /home/svc_ansible/.ssh",
@@ -92,11 +93,11 @@ resource "digitalocean_droplet" "webub" {
 
 
 output "server_ip" {
-    value = digitalocean_droplet.webub.*.ipv4_address
+    value = digitalocean_droplet.monitor.*.ipv4_address
 }
 
 output "server_name" {
-    value = digitalocean_droplet.webub.*.name
+    value = digitalocean_droplet.monitor.*.name
 }
 
 
@@ -105,16 +106,55 @@ resource "digitalocean_record" "web" {
   domain = data.digitalocean_domain.web.name
   type   = "A"
   ttl    = 30
-  name   = digitalocean_droplet.webub[count.index].name
-  value   = digitalocean_droplet.webub[count.index].ipv4_address
+  name   = digitalocean_droplet.monitor[count.index].name
+  value   = digitalocean_droplet.monitor[count.index].ipv4_address
 }
 
-resource "digitalocean_record" "consul" {
+resource "digitalocean_record" "prometheus" {
   count = var.droplet_count
   domain = data.digitalocean_domain.web.name
   type   = "CNAME"
   ttl    = 30
-  name   = "consul-${count.index +1}"
-  value   = "${digitalocean_droplet.webub[count.index].name}.${data.digitalocean_domain.web.name}."
+  name   = "prometheus-${count.index +1}"
+  value   = "${digitalocean_droplet.monitor[count.index].name}.${data.digitalocean_domain.web.name}."
 }
+
+resource "digitalocean_record" "grafana" {
+  count = var.droplet_count
+  domain = data.digitalocean_domain.web.name
+  type   = "CNAME"
+  ttl    = 30
+  name   = "grafana-${count.index +1}"
+  value   = "${digitalocean_droplet.monitor[count.index].name}.${data.digitalocean_domain.web.name}."
+}
+
+resource "digitalocean_record" "kibana" {
+  count = var.droplet_count
+  domain = data.digitalocean_domain.web.name
+  type   = "CNAME"
+  ttl    = 30
+  name   = "kibana-${count.index +1}"
+  value   = "${digitalocean_droplet.monitor[count.index].name}.${data.digitalocean_domain.web.name}."
+}
+
+resource "digitalocean_record" "elasticsearch" {
+  count = var.droplet_count
+  domain = data.digitalocean_domain.web.name
+  type   = "CNAME"
+  ttl    = 30
+  name   = "elasticsearch-${count.index +1}"
+  value   = "${digitalocean_droplet.monitor[count.index].name}.${data.digitalocean_domain.web.name}."
+}
+
+resource "digitalocean_record" "zipkin" {
+  count = var.droplet_count
+  domain = data.digitalocean_domain.web.name
+  type   = "CNAME"
+  ttl    = 30
+  name   = "zipkin-${count.index +1}"
+  value   = "${digitalocean_droplet.monitor[count.index].name}.${data.digitalocean_domain.web.name}."
+}
+
+
+
 
