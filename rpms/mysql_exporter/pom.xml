@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2020 Softvision - All Rights Reserved
+
+    This file is subject to the terms and conditions defined in
+    file 'LICENSE.txt', which is part of this source code package.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.softvision.utils</groupId>
+    <artifactId>mysql_exporter</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <properties>
+
+        <plugin.version.jacoco-plugin>0.8.1</plugin.version.jacoco-plugin>
+        <plugin.version.maven-resources-plugin>2.7</plugin.version.maven-resources-plugin>
+        <plugin.version.rpm-maven-plugin>2.1.5</plugin.version.rpm-maven-plugin>
+        <exec.name>mysqld_exporter</exec.name>
+    </properties>
+
+
+
+    <build>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>rpm</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <!--More info about parsedVersion.qualifier at https://www.mojohaus.org/build-helper-maven-plugin/usage.html -->
+            </properties>
+            <build>
+                <finalName>${project.artifactId}</finalName>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>${plugin.version.maven-resources-plugin}</version>
+<!--                        <configuration>-->
+<!--                            <encoding>UTF-8</encoding>-->
+<!--                        </configuration>-->
+                        <executions>
+                            <execution>
+                                <id>update-version</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>resources</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>rpm-maven-plugin</artifactId>
+                        <version>${plugin.version.rpm-maven-plugin}</version>
+                        <executions>
+                            <execution>
+                                <id>generate-rpm</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>rpm</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <license>2020 Softvision</license>
+                            <distribution>${project.groupId}</distribution>
+                            <group>${project.groupId} ${project.artifactId}</group>
+                            <packager>${project.groupId}</packager>
+                            <sourceEncoding>UTF-8</sourceEncoding>
+                            <needarch>true</needarch>
+                            <targetOS>linux</targetOS> <!-- fixes intended for differnet OS error -->
+                            <autoProvides>false</autoProvides>
+                            <autoRequires>false</autoRequires>
+                            <version>1.0.0</version>
+                            <defineStatements>
+                                <defineStatement>_binaries_in_noarch_packages_terminate_build 0</defineStatement>
+                                <defineStatement>_binary_filedigest_algorithm 1</defineStatement>
+                                <defineStatement>_binary_payload 1</defineStatement>
+                            </defineStatements>
+                            <mappings>
+                                <mapping>
+                                    <directory>/opt/prometheus-exporters</directory>
+                                    <filemode>755</filemode>
+                                    <username>root</username>
+                                    <groupname>root</groupname>
+                                    <sources>
+                                        <source>
+                                            <location>mysqld_exporter-0.12.1.linux-amd64/${exec.name}</location>
+                                            <targetArchitecture>x86_64</targetArchitecture>
+                                        </source>
+                                    </sources>
+                                </mapping>
+                                <mapping>
+                                    <directory>/usr/lib/systemd/system</directory>
+                                    <filemode>644</filemode>
+                                    <username>root</username>
+                                    <groupname>root</groupname>
+                                    <directoryIncluded>false</directoryIncluded>
+                                    <sources>
+                                        <source>
+                                            <location>${project.artifactId}.service</location>
+                                            <destination>${project.artifactId}.service</destination>
+                                        </source>
+                                    </sources>
+                                </mapping>
+<!--                                <mapping>-->
+<!--                                    <directory>/etc/sysconfig</directory>-->
+<!--                                    <filemode>644</filemode>-->
+<!--                                    <username>root</username>-->
+<!--                                    <groupname>root</groupname>-->
+<!--                                    <directoryIncluded>false</directoryIncluded>-->
+<!--                                    <configuration>noreplace</configuration>-->
+<!--                                    <sources>-->
+<!--                                        <source>-->
+<!--                                            <location>${project.artifactId}.property</location>-->
+<!--                                            <destination>sb-${project.artifactId}</destination>-->
+<!--                                        </source>-->
+<!--                                    </sources>-->
+<!--                                </mapping>-->
+                                <mapping>
+                                    <directory>/etc/</directory>
+                                    <filemode>644</filemode>
+                                    <username>root</username>
+                                    <groupname>root</groupname>
+                                    <directoryIncluded>false</directoryIncluded>
+                                    <configuration>noreplace</configuration>
+                                    <sources>
+                                        <source>
+                                            <location>.${project.artifactId}.cnf</location>
+                                            <destination>.${project.artifactId}.cnf</destination>
+                                        </source>
+                                    </sources>
+                                </mapping>
+                            </mappings>
+                            <preinstallScriptlet>
+                                <script>
+                                    if ! getent passwd prometheus >/dev/null ; then
+                                    echo "Add prometheus user"
+                                    groupadd --system prometheus
+                                    useradd -s /sbin/nologin --system -g prometheus prometheus
+                                    fi
+                                </script>
+                            </preinstallScriptlet>
+                            <postinstallScriplet>
+                                systemctl daemon-reload
+                                systemctl enable mysql_exporter
+                                systemctl start mysql_exporter
+                            </postinstallScriplet>
+
+
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
