@@ -60,10 +60,14 @@
   become: yes
   when: ansible_distribution == "CentOS"
 
-- name : make docker compose executable
+- name: make docker compose executable
   file: dest=/usr/local/bin/docker-compose mode=+xx
   when: ansible_distribution == "CentOS"
 
+- name: delay
+  pause:
+    seconds: 5
+
 - name: show docker version
   shell:
-    cmd: docker-compose --version
+    cmd: /usr/local/bin/docker-compose --version

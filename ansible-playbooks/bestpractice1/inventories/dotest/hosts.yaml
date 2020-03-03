@@ -2,7 +2,7 @@ all:
   hosts:
     sv-test-1.softvision.site:
   vars:
-    ansible_ssh_user: root
+    ansible_ssh_user: softvisiondev
     ansible_user: root
   children:
     do_clusterservers:
@@ -31,3 +31,6 @@ all:
       hosts:
         sv-test-3.softvision.site:
 
+    slickdeals_monitor:
+      hosts:
+        softvision-monitoring.slickdeals.dev:

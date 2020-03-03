@@ -1,0 +1,21 @@
+version: "3.7"
+services:
+  filebeat:
+    hostname: filebeat
+    container_name: filebeat
+    network_mode: host
+    # ** Here to build the image, you need to specify your own docker hub account :
+    image: softvisionlvcp/filebeat:latest
+    build:
+      context: ./
+    volumes:
+      # needed to persist filebeat tracking data :
+      - "filebeat_data:/usr/share/filebeat/data:rw"
+      # needed to access all docker logs (read only) :
+      - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
+      # needed to access additional informations about containers
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+volumes:
+  # create a persistent volume for Filebeat
+  filebeat_data:

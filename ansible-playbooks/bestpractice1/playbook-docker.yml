@@ -1,0 +1,10 @@
+#################################################
+# DO Community Playbooks: apache
+#################################################
+---
+- hosts: slickdeals_monitor
+  become: true
+#  vars_files:
+#    - vars/default.yml
+  roles:
+    - docker

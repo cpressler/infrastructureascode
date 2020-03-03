@@ -1,0 +1,33 @@
+global:
+  scrape_interval:     15s # By default, scrape targets every 15 seconds.
+
+scrape_configs:
+ - job_name: prometheus
+   static_configs:
+     - targets: ['127.0.0.1:9090']
+
+ - job_name: nodeexporter
+   static_configs:
+     - targets: ['127.0.0.1:9100']    
+# - job_name: spring_actuator
+#   metrics_path: 'actuator/prometheus'
+#   scrape_interval: 5s
+#   static_configs:
+#     - targets: ['vps.pressler.com:8180'] # example for springboot app
+# - job_name: 'nginx-react'
+#   scrape_interval: 15s
+#   metrics_path: 'prometheus'
+#   static_configs:
+#     - targets: ['vps.pressler.com:9113'] # example for nginx export
+ - job_name: consul
+   consul_sd_configs:
+     - server: '192.168.74.176:8500' # example for consul service discovery
+#     - server: '192.168.74.182:8500' # example for consul service discovery
+
+   relabel_configs:
+     - source_labels: [__meta_consul_tags]
+       regex: .*,metrics,.*
+       action: keep
+     - source_labels: [__meta_consul_service]
+       target_label: job 
+
