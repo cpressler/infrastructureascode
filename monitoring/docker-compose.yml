@@ -22,10 +22,10 @@ services:
       service.name: prometheus
 
 
-  slickdeals-grafana:
+  grafana:
     image: grafana/grafana
     network_mode: host
-    container_name: slickdeals-grafana
+    container_name: grafana
     ports:
       - "3000:3000"
 #    networks:
@@ -35,9 +35,9 @@ services:
       - ./grafana/provisioning/:/etc/grafana/provisioning/
     environment:
       - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource,grafana-piechart-panel
-      - GF_SMTP_HOST=smtpout.secureserver.net:465
+      - GF_SMTP_HOST=smtpout.xxxxx
       - GF_SMTP_USER=chet@pressler.com
-      - GF_SMTP_PASSWORD=utaee85
+      - GF_SMTP_PASSWORD=xxxx
       - GF_SMTP_ENABLED=true
       - GF_SMTP_SKIP_VERIFY=true
       - GF_SMTP_FROM_ADDRESS=admin@ci.loyalty.slickdeals.net

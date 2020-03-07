@@ -2,9 +2,9 @@
 # DO Community Playbooks: apache
 #################################################
 ---
-- hosts: do_chefserver
+- hosts: chefserver
   become: true
-#  vars_files:
-#    - vars/default.yml
+  vars_files:
+    - vars/default.yml
   roles:
     - chef

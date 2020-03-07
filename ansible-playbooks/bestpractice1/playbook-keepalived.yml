@@ -1,0 +1,16 @@
+---
+
+
+- hosts: softvision-lb01.slickdeals.dev
+  become: true
+  vars_files:
+    - vars/default.yml
+  roles:
+    - { role: keepalived, keepalived_shared_ip: "192.168.75.1", keepalived_role: "master" }
+
+- hosts: softvision-lb02.slickdeals.dev
+  become: true
+  vars_files:
+    - vars/default.yml
+  roles:
+    - { role: keepalived, keepalived_shared_ip: "192.168.75.1", keepalived_role: "slave" }

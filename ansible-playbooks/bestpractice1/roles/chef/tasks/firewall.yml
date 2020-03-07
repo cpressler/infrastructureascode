@@ -1,16 +1,31 @@
 ---
+
+- name: checking service status
+  command: systemctl status firewalld
+  register: result
+  ignore_errors: yes
+
+#- name: showing report
+#  debug:
+#    var: result
+
+
 - name: Firewall http
   shell:
     cmd: firewall-cmd --permanent --zone public --add-service http
   become: yes
-  when: ansible_distribution == "CentOS"
+  when:
+    - ansible_distribution == "CentOS"
+    - result.rc == 0
 
 
 - name: Firewall https
   shell:
     cmd: firewall-cmd --permanent --zone public --add-service https
   become: yes
-  when: ansible_distribution == "CentOS"
+  when:
+    - ansible_distribution == "CentOS"
+    - result.rc == 0
 
 
 
@@ -18,4 +33,6 @@
   shell:
     cmd: firewall-cmd --reload
   become: yes
-  when: ansible_distribution == "CentOS"
+  when:
+    - ansible_distribution == "CentOS"
+    - result.rc == 0

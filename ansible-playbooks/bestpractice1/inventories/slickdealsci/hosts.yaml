@@ -1,0 +1,26 @@
+all:
+  hosts:
+    sv-test-1.softvision.site:
+  vars:
+    ansible_ssh_user: softvisiondev
+    ansible_user: softvisiondev
+    ansible_ssh_private_key_file: ~/.ssh/slickdeals_rsa
+  children:
+
+    chefserver:
+      ansible_ssh_user: softvisiondev
+      hosts:
+        softvision-chef.slickdeals.dev:
+    monitor:
+      hosts:
+        softvision-monitoring.slickdeals.dev:
+    dnsservers:
+      vars:
+        ansible_ssh_user: softvisiondev
+      hosts:
+        softvision-dns01.slickdeals.dev:
+        softvision-dns02.slickdeals.dev:
+    loadbalancers:
+      hosts:
+        softvision-lb01.slickdeals.dev:
+        softvision-lb02.slickdeals.dev:

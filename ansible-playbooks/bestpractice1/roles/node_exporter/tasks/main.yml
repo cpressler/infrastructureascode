@@ -1,0 +1,19 @@
+---
+# tasks file for node_exporter
+
+- name: Copy file rpm
+  copy:
+    src: files/node_exporter-1.0.0-1.x86_64.rpm
+    dest: /tmp/node_exporter-1.0.0-1.x86_64.rpm
+
+- name: Install package.
+  yum:
+    name: /tmp/node_exporter-1.0.0-1.x86_64.rpm
+    state: present
+
+
+- name: delete node_exporter rpm
+  file:
+    path: /tmp/node_exporter-1.0.0-1.x86_64.rpm
+    state: absent
+  become: yes

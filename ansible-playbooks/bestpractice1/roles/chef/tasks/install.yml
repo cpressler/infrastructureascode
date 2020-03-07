@@ -2,7 +2,7 @@
 
 - name: get chef
   get_url:
-    url: https://packages.chef.io/stable/el/7/chef-server-core-12.10.0-1.el7.x86_64.rpm
+    url: https://packages.chef.io/stable/el/7/chef-server-core-13.1.13-1.el7.x86_64.rpm
     dest: /tmp
   become: yes
   when: ansible_distribution == "CentOS"
@@ -12,10 +12,17 @@
 #  pkg: /tmp/chef-server-core-12.10.0-1.el7.x86_64.rpm
 #  state: present
 
+- name: ensure chef-server is NOT installed
+  yum:
+    name: chef-server-core
+    state: absent
+    update_cache: true
+  become: true
+
 
 - name: Install chef via yum
   package:
-    name: /tmp/chef-server-core-12.10.0-1.el7.x86_64.rpm
+    name: /tmp/chef-server-core-13.1.13-1.el7.x86_64.rpm
     state: latest
   become: yes
 
@@ -27,26 +34,51 @@
 #    cmd: rpm -ivh /tmp/chef-server-core-*.rpm
 
 - name: delete chef rpm
-  shell:
-    cmd: rm /tmp/chef-server-core-*.rpm
+  file: /tmp/chef-server-core-*.rpm
+    state: absent
+  become: yes
 
 - name: chef reconfigure
   shell:
     cmd: chef-server-ctl reconfigure --chef-license=accept
+    become: yes
 
 
 - name: chef status
   shell:
     cmd: chef-server-ctl status
+    become: yes
+
+
+- name: chef user list
+  command: "chef-server-ctl  user-list | grep admin"
+  register: userslist
+  ignore_errors: yes
+  become: yes
+
+- name: chef user list
+  command: "chef-server-ctl  user-list | grep admin"
+  register: orglist
+  ignore_errors: yes
+  become: yes
+
+- name: showing users
+  debug:
+    var: userslist
 
 - name: chef create account
   shell:
     cmd: chef-server-ctl user-create admin admin admin chet@pressler.com password -f /etc/chef/admin.pem
-
+    ignore_errors: no
+  become: yes
+  when:
+    - userslist.rc != 0
 
 - name: chef creater organization
   shell:
     cmd: chef-server-ctl org-create itzgeek "ITzGeek, Inc" --association_user admin -f /etc/chef/itzgeek-validator.pem
-
-
+    ignore_errors: no
+  become: yes
+  when:
+    - orglist.rc != 0
 

@@ -1,0 +1,18 @@
+---
+# tasks file for chef
+
+#- name: wget | Check
+#  import_tasks: wget.yml
+
+- name: chef install
+  import_tasks: install.yml
+
+- name: chef | Firewall
+  import_tasks: firewall.yml
+  tags:
+    - firewall
+
+- name: chef | Management Console
+  import_tasks: manangementconsole.yml
+  tags:
+    - manangementconsole

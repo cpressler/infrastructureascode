@@ -1,0 +1,8 @@
+---
+
+bind_config_master_forward_zones_files:
+  - name: "ci.loyalty.slickdeals.net"
+
+bind_config_master_reverse_zones_files:
+  - name: "empty"
+

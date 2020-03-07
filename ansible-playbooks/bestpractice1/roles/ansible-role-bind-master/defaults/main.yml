@@ -1,0 +1,32 @@
+---
+bind_config_master_zones:
+
+bind_config_slave_zones: []
+bind_config_forward_zones: []
+
+
+bind_config_master_allow_transfer: []
+#bind_config_master_forwarders: [ '192.168.74.8' , '192.168.74.9' ]
+bind_config_master_forwarders: [ '67.207.67.3' , '67.207.67.2' ]
+bind_config_recursion: "yes"
+
+bind_service_state: started
+bind_service_enabled: yes
+bind_pkg_state: installed
+bind_base_zones_path: "/var/named"
+bind_base_zones_datadir: "data"
+bind_masterzones_path: "masters"
+bind_reversezones_path: "reverse"
+bind_slavezones_path: "slaves"
+bind_config_listen_on: any
+bind_config_allow_query: []
+
+
+bind_config_master_forward_zones_files:
+  - name: "linux.local"
+  - name: "qa.loyalty.softvision.site"
+
+bind_config_master_reverse_zones_files:
+  - name: "10.25.172"
+  - name: "192.168.74"
+

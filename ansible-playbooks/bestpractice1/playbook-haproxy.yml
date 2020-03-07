@@ -1,0 +1,10 @@
+
+---
+# prequisite
+#  ansible-galaxy install geerlingguy.haproxy
+- hosts: loadbalancers
+  become: true
+  vars_files:
+    - vars/default.yml
+  roles:
+    - { role: geerlingguy.haproxy }  #https://galaxy.ansible.com/geerlingguy/haproxy

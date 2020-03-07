@@ -27,7 +27,7 @@ all:
       hosts:
         consul-1.softvision.site:
 
-    do_chefserver:
+    chefserver:
       hosts:
         sv-test-3.softvision.site:
 

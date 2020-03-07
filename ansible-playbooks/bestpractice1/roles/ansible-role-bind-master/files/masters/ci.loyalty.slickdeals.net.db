@@ -1,0 +1,28 @@
+$TTL 86400
+@ IN SOA primary.ci.loyalty.slickdeals.net. root.ci.loyalty.slickdeals.net. (
+2016042112 ;Serial
+3600 ;Refresh
+1800 ;Retry
+604800 ;Expire
+43200 ;Minimum TTL
+)
+;Name Server Information
+@ IN NS primary.ci.loyalty.slickdeals.net.
+;IP address of Name Server
+primary IN A 192.168.75.170
+;A - Record HostName To Ip Address
+dns01  IN A 192.168.75.170
+dns02  IN A 192.168.75.171
+lb01  IN A 192.168.75.172
+lb02 IN A 192.168.75.173
+monitoring  IN A 192.168.75.174
+chef  IN A 192.168.75.175
+ci01  IN A 192.168.74.181
+ci02  IN A 192.168.74.182
+
+;CNAME record
+prometheus IN CNAME monitoring.ci.loyalty.slickdeals.net.
+elasticsearch IN CNAME monitoring.ci.loyalty.slickdeals.net.
+kibana IN CNAME monitoring.ci.loyalty.slickdeals.net.
+zipkin IN CNAME monitoring.ci.loyalty.slickdeals.net.
+grafana IN CNAME monitoring.ci.loyalty.slickdeals.net.

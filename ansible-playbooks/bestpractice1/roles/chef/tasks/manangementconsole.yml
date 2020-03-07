@@ -2,14 +2,15 @@
 
 - name: chef add management console addin
   shell:
-    cmd: cchef-server-ctl install chef-manage
-
+    cmd: chef-server-ctl install chef-manage
+  become: yes
 
 - name: chef reconfigure server
   shell:
     cmd: chef-server-ctl reconfigure --chef-license=accept
+  become: yes
 
 - name: chef reconfigure management
   shell:
     cmd: chef-manage-ctl reconfigure --accept-license
-
+  become: yes

@@ -1,0 +1,32 @@
+---
+# tasks file for mysql_exporter
+
+
+- name: Copy file grant script to create user
+  copy:
+    src: files/exportergrants.sql
+    dest: /tmp/exportergrants.sql
+
+- name: Copy file rpm
+  copy:
+    src: files/mysql_exporter-1.0.0-1.x86_64.rpm
+    dest: /tmp/mysql_exporter-1.0.0-1.x86_64.rpm
+
+- name: Install package.
+  yum:
+    name: /tmp/mysql_exporter-1.0.0-1.x86_64.rpm
+    state: present
+
+- name: delete mysql_exporter rpm
+  file:
+    path: /tmp/mysql_exporter-1.0.0-1.x86_64.rpm
+    state: absent
+  become: yes
+
+
+- name: delete exportergrants.sql
+  file:
+    path: /tmp/exportergrants.sql
+    state: absent
+  become: yes
+

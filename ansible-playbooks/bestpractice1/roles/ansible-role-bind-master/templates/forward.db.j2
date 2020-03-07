@@ -1,0 +1,28 @@
+$TTL 86400
+@ IN SOA primary.qa.loyalty.slickdeals.net. root.qa.loyalty.slickdeals.net. (
+2016042112 ;Serial
+3600 ;Refresh
+1800 ;Retry
+604800 ;Expire
+43200 ;Minimum TTL
+)
+;Name Server Information
+@ IN NS primary.{{ env_subdomain }}.
+;IP address of Name Server
+primary IN A {{ primary_ipaddress }}
+;A - Record HostName To Ip Address
+dns01  IN A {{ dns01_ipaddress }}
+dns02  IN A {{ dns02_ipaddress }}
+lb01  IN A 1{{ lb01_ipaddress }}
+lb02 IN A {{ lb02_ipaddress }}
+monitoring  IN A {{ monitoring_ipaddress }}
+chef  IN A {{ chef_ipaddress }}
+ci01  IN A {{ vm1_ipaddress }}
+ci02  IN A {{ vm2_ipaddress }}
+
+;CNAME record
+prometheus IN CNAME monitoring.{{ env_subdomain }}.
+elasticsearch IN CNAME monitoring.{{ env_subdomain }}.
+kibana IN CNAME monitoring.{{ env_subdomain }}.
+zipkin IN CNAME monitoring.{{ env_subdomain }}.
+grafana IN CNAME monitoring.{{ env_subdomain }}.

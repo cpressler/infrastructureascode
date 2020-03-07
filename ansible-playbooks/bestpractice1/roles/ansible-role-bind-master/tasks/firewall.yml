@@ -1,12 +1,28 @@
 ---
-- name: Firewall 1
+
+- name: checking service status
+  command: systemctl status firewalld
+  register: result
+  ignore_errors: yes
+
+#- name: showing report
+#  debug:
+#    var: result
+
+- name: Firewall open DNS port
   shell:
     cmd: firewall-cmd  --add-service=dns --zone=public  --permanent
   become: yes
-  when: ansible_distribution == "CentOS"
+  when:
+    - ansible_distribution == "CentOS"
+    - result.rc == 0
 
-- name: Firewall 2
+
+
+- name: Firewall reload firewall config
   shell:
     cmd: firewall-cmd --reload
   become: yes
-  when: ansible_distribution == "CentOS"
+  when:
+    - ansible_distribution == "CentOS"
+    - result.rc == 0

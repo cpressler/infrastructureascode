@@ -1,0 +1,6 @@
+---
+# defaults file for resolv.conf
+
+search_domain: softvision.site
+nameserver1: 67.207.67.2
+nameserver2: 67.207.67.3
